@@ -2,31 +2,41 @@
 // https://esports-assets.s3.amazonaws.com/production/files/rules/2017-MSI-Ruleset.pdf
 var byGroup
 var colorChoice = 0
+var staticPick = false;
 var ƒ = d3.f
 // console.clear()
-d3.loadData('annotations.json', 'matches.tsv', function(err, res){
-    d3.selectAll('.group-header').st({opacity: 1})
-
-    annotations = res[0]
-    matches = res[1]
-
-    teams2wins = {}
-
-    matches.forEach(function(d, i){
-        d.winner = +d.winner
-        d.actualWinner = !(d.winner === 0) ? d.winner : 3
-        d.complete = i < 24
-        d.allTeams = d.t1 + '-' + d.t2
-        d.wName = d['t' + d.winner]
-
-        if (!teams2wins[d.t1]) teams2wins[d.t1] = 0
-        if (!teams2wins[d.t2]) teams2wins[d.t2] = 0
-        teams2wins[d.wName]++
+function readFile(){
+    d3.loadData('annotations.json', 'matches.tsv', function(err, res){
+        d3.selectAll('.group-header').st({opacity: 1})
+    
+        annotations = res[0]
+        matches = res[1]
+    
+        teams2wins = {}
+    
+        matches.forEach(function(d, i){
+            d.winner = +d.winner
+            if( i < 24 || !staticPick){
+                d.wName = d['t' + d.winner]
+                d.actualWinner = !(d.winner === 0) ? d.winner : 3
+            }
+            d.complete = i < 24
+            d.allTeams = d.t1 + '-' + d.t2
+            if (!teams2wins[d.t1]) teams2wins[d.t1] = 0
+            if (!teams2wins[d.t2]) teams2wins[d.t2] = 0
+            if (d.date < "10-17") teams2wins[d.wName]++     //make sure to change key each year
+        })
+    
+        byGroup = d3.nestBy(matches, ƒ('group'))
+        reDraw();
     })
+}
+readFile()
 
-    byGroup = d3.nestBy(matches, ƒ('group'))
-    reDraw();
-})
+function static(){
+    staticPick = !staticPick
+    readFile();
+}
 
 function changeColor(){
     colorChoice ^= 1;
@@ -87,7 +97,7 @@ function scoreMatches(matches){
                     against = matches.filter(match => {return match.allTeams == d[0].name + '-' + d[1].name 
                                                            || match.allTeams == d[1].name + '-' + d[0].name})
                     if(against[0].actualWinner == against[1].actualWinner){
-                        d.forEach(function(d){ if (d.name == against[0].wName) d.advance = 'u'})
+                        d.forEach(function(d){ if (d.name == against[0].actualWinner) d.advance = 'u'})
                     }
                 }
                 else
@@ -101,7 +111,7 @@ function scoreMatches(matches){
                 against = matches.filter(match => {return match.allTeams == d[0].name + '-' + d[1].name 
                                                        || match.allTeams == d[1].name + '-' + d[0].name})
                 if(against[0].actualWinner == against[1].actualWinner){
-                    d.forEach(function(d){ if (d.name == against[0].wName) d.advance = 'e'})
+                    d.forEach(function(d){ if (d.name != against[0].actualWinner) d.advance = 'e'})
                 }
             }
             if(advanceSlots == - 1){
@@ -122,7 +132,6 @@ function drawGroup(gMatches){
     
     var complete = gMatches.filter(d => d.complete)
     var incomplete = gMatches.filter(function(d){ return !d.complete })
-
     scenarios = d3.range(64).map(function(i){
         incomplete.forEach(function(d, j){
         d.winner = (i >> j) % 2 ? 1 : 2 
@@ -274,24 +283,25 @@ function drawResults(sel, scenarios, name, complete, incomplete){
             return d.map(ƒ('name')).join(' and ') + {u:' first seed',t: ' advance', m: ' tie', f: (d.length > 1 ? ' are' : ' is') + ' eliminated', e:' last place'}[d.key]
             })
         })
+        
         .on('click', function(d){
-			current = []
-			blank = true
-			d3.selectAll('.matches > .game').each(function(e, i){
-                if (e.group == d.incomplete[0].group){
-					current.push(e.clicked) 
-					if (e.clicked != 0) blank = false
-                }
-            })
-			reset = !d3.select(this).classed('hidden') && !blank
+            current = []
+            blank = true
             d3.selectAll('.matches > .game').each(function(e, i){
                 if (e.group == d.incomplete[0].group){
-					if(reset) e.clicked = -1
-					else if(blank)
-						e.clicked = parseInt(d.str[i % 6]) - 1
-					else if(parseInt(d.str[i % 6]) != current[i % 6])
-						e.clicked = -1
-					else e.clicked--
+                    current.push(e.clicked) 
+                    if (e.clicked != 0) blank = false
+                }
+            })
+            reset = !d3.select(this).classed('hidden') && !blank
+            d3.selectAll('.matches > .game').each(function(e, i){
+                if (e.group == d.incomplete[0].group){
+                    if(reset) e.clicked = -1
+                    else if(blank)
+                        e.clicked = parseInt(d.str[i % 6]) - 1
+                    else if(parseInt(d.str[i % 6]) != current[i % 6])
+                        e.clicked = -1
+                    else e.clicked--
                     d3.select(this).dispatch("click")
                 }
             })
