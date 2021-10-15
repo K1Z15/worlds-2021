@@ -297,8 +297,8 @@ function drawResults(sel, scenarios, name, complete, incomplete) {
     recordSel.append('text')
         .text(function (d) {
             var s
-            if (d.key == '111') s = 'Win Next Three'
-            if (d.key == '000') s = 'Lose Next Three'
+            if (d.key == '111') s = 'Gagne les 3 prochains'
+            if (d.key == '000') s = 'Perd les 3 prochains'
             if (d.key == '001') s = against[2]
             if (d.key == '010') s = against[1]
             if (d.key == '100') s = against[0]
