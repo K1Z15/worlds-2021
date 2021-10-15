@@ -246,13 +246,13 @@ function drawResults(sel, scenarios, name, complete, incomplete) {
         return !d.currentWon
     })
 
-    var pStr = 'Lost to '
-    pStr += pLost.map(ƒ('otherTeam')).join(' and ')
+    var pStr = 'Perd contre '
+    pStr += pLost.map(ƒ('otherTeam')).join(' et ')
 
     if (pBeat.length) {
         pStr += ' // Bat ' + pBeat.map(ƒ('otherTeam')).join(' et ')
     } else {
-        pStr = pStr.replace(' and ', ', ')
+        pStr = pStr.replace(' et ', ', ')
     }
     if (!pLost.length) pStr = pStr.replace('Perd contre  //', '').replace(' et ', ', ')
     // pStr += ' previously'
@@ -285,7 +285,7 @@ function drawResults(sel, scenarios, name, complete, incomplete) {
 
     winsSel.append('text')
         .text(function (d, i) {
-            return i == 1 ? 'Only Lose To...' : i == 2 ? 'Only Beat...' : ''
+            return i == 1 ? 'perd uniquement contre...' : i == 2 ? 'Gagne uniquement contre...' : ''
         })
         .at({textAnchor: 'middle', x: 10 * 3.5 + 100, y: -30, fill: '#888', fontSize: 12})
 
@@ -342,7 +342,7 @@ function drawResults(sel, scenarios, name, complete, incomplete) {
 
             var byAdvanceSel = tt.appendMany('div.advance', d3.nestBy(d.teams, ƒ('advance')).sort(d3.descendingKey('key')))
                 .text(function (d) {
-                    return d.map(ƒ('name')).join(' and ') + {
+                    return d.map(ƒ('name')).join(' et ') + {
                         u: ' first seed',
                         t: ' advance',
                         m: ' tie',
