@@ -1,7 +1,7 @@
 [
   {
     "path": "M 286,220 A 123.355 123.355 0 0 1 105,221",
-    "text": "DK can lose all three games and still advance without a tiebreaker",
+    "text": "DK peut perdre les trois matchs et toujours avancer sans tiebreaker",
     "team": "DK",
     "lw": 24,
     "textOffset": [
@@ -11,7 +11,7 @@
   },
   {
     "path": "M 261,-64 A 62.002 62.002 0 0 1 182,4",
-    "text": "FNC can go 3-0  and still be eliminated without a tiebreaker",
+    "text": "FNC peut faire 3-0 et toujours être éliminé sans bris tiebreaker",
     "team": "FNC",
     "lw": 24,
     "textOffset": [
@@ -21,7 +21,7 @@
   },
   {
     "path": "M -2000 0",
-    "text": "Two loses knock DFM out",
+    "text": "2 défaites knock DFM out",
     "team": "DFM",
     "lw": 22,
     "textOffset": [
@@ -31,7 +31,7 @@
   },
   {
     "path": "M -2000 0",
-    "text": "Two wins advance LNG and GEN out of groups",
+    "text": "2 victoires avance LNG et GEN hors des groupes",
     "team": "GEN",
     "lw": 22,
     "textOffset": [
@@ -41,7 +41,7 @@
   },
   {
     "path": "M -2000 0",
-    "text": "Two loses knock MAD and TL out",
+    "text": "2 défaites knock MAD et TL out",
     "team": "MAD",
     "lw": 22,
     "textOffset": [
