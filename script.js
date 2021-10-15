@@ -250,11 +250,11 @@ function drawResults(sel, scenarios, name, complete, incomplete) {
     pStr += pLost.map(ƒ('otherTeam')).join(' and ')
 
     if (pBeat.length) {
-        pStr += ' // Beat ' + pBeat.map(ƒ('otherTeam')).join(' and ')
+        pStr += ' // Bat ' + pBeat.map(ƒ('otherTeam')).join(' et ')
     } else {
         pStr = pStr.replace(' and ', ', ')
     }
-    if (!pLost.length) pStr = pStr.replace('Lost to  //', '').replace(' and ', ', ')
+    if (!pLost.length) pStr = pStr.replace('Perd contre  //', '').replace(' et ', ', ')
     // pStr += ' previously'
 
     var byWins = d3.nestBy(scenarios, ƒ('wins'))
